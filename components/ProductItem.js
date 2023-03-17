@@ -25,13 +25,13 @@ function ProductItem({ product }) {
         </Link>
 
         <div className="p-5">
-          <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">
+          <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
             CATEGORY
           </h3>
-          <h2 class="text-gray-900 title-font text-lg font-medium">
-            The Catalyzer
+          <h2 className="text-gray-900 title-font text-lg font-medium">
+            {product.name}
           </h2>
-          <p class="mt-1">$16.00</p>
+          <p className="mt-1">$16.00</p>
           <Link href="#" className="button primary-button">
             Add to Cart
             {/* <svg
