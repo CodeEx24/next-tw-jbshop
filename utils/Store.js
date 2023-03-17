@@ -18,6 +18,22 @@ const cartStore = create((set) => ({
 
       return { ...state, cart: { ...state.cart, cartItems } };
     }),
+  cartRemoveItem: (newItem) =>
+    set((state) => {
+      const cartItems = state.cart.cartItems.filter(
+        (item) => item.slug !== newItem.slug
+      );
+      return { ...state, cart: { ...state.cart, cartItems } };
+    }),
+
+  cartQtyUpdateItem: (newItem) =>
+    set((state) => {
+      const cartItems = state.cart.cartItems.map((item) =>
+        item.slug === newItem.slug ? newItem : item
+      );
+
+      return { ...state, cart: { ...state.cart, cartItems } };
+    }),
 }));
 
 export default cartStore;

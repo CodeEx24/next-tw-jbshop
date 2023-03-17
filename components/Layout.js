@@ -1,7 +1,7 @@
 import cartStore from '@/utils/Store';
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 function Layout({ title, children }) {
   const cart = cartStore((state) => state.cart);
@@ -29,7 +29,7 @@ function Layout({ title, children }) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                className="w-10 h-10 text-white p-2 bg-yellow-500 rounded-full"
+                className="w-10 h-10 text-white p-2 bg-indigo-600 rounded-full"
                 viewBox="0 0 24 24"
               >
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
@@ -40,7 +40,7 @@ function Layout({ title, children }) {
               <Link href={'/cart'} className="mr-5 hover:text-gray-900 ">
                 Cart{' '}
                 {cart.cartItems.length > 0 && (
-                  <span className="ml-1 rounded-full bg-yellow-500 px-2 py-1 text-xs font-bold text-white">
+                  <span className="ml-1 rounded-full bg-indigo-600 px-2 py-1 text-xs font-bold text-white">
                     {cart.cartItems.length}
                   </span>
                 )}
