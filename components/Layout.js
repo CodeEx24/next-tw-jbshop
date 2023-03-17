@@ -2,8 +2,14 @@ import cartStore from '@/utils/Store';
 import Head from 'next/head';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { useSession } from 'next-auth/react';
 
 function Layout({ title, children }) {
+  const { status, data: session } = useSession();
+
   const cart = cartStore((state) => state.cart);
   const [cartItemsCount, setcartItemsCount] = useState(0);
 
@@ -19,6 +25,8 @@ function Layout({ title, children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <ToastContainer position="bottom-center" limit={1} />
 
       <div className="flex min-h-screen flex-col justify-between ">
         <header className="text-gray-600 body-font shadow-md">
@@ -50,9 +58,16 @@ function Layout({ title, children }) {
                   </span>
                 )}
               </Link>
-              <Link href={'/login'} className="mr-5 hover:text-gray-900">
-                Log In
-              </Link>
+
+              {status === 'loading' ? (
+                'Loading'
+              ) : session?.user ? (
+                session.user.name
+              ) : (
+                <Link href={'/login'} className="mr-5 hover:text-gray-900">
+                  Log In
+                </Link>
+              )}
             </nav>
           </div>
         </header>
