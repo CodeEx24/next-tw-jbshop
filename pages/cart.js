@@ -6,6 +6,7 @@ import { CheckIcon, ClockIcon, XIcon } from '@heroicons/react/solid';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 
 function CartScreen() {
   const router = useRouter();
@@ -252,4 +253,4 @@ function CartScreen() {
   );
 }
 
-export default CartScreen;
+export default dynamic(() => Promise.resolve(CartScreen), { ssr: false });

@@ -1,10 +1,15 @@
 import cartStore from '@/utils/Store';
 import Head from 'next/head';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 function Layout({ title, children }) {
   const cart = cartStore((state) => state.cart);
+  const [cartItemsCount, setcartItemsCount] = useState(0);
+
+  useEffect(() => {
+    setcartItemsCount(cart.cartItems.length);
+  }, [cart.cartItems]);
 
   return (
     <>
@@ -39,9 +44,9 @@ function Layout({ title, children }) {
             <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
               <Link href={'/cart'} className="mr-5 hover:text-gray-900 ">
                 Cart{' '}
-                {cart.cartItems.length > 0 && (
+                {cartItemsCount > 0 && (
                   <span className="ml-1 rounded-full bg-indigo-600 px-2 py-1 text-xs font-bold text-white">
-                    {cart.cartItems.length}
+                    {cartItemsCount}
                   </span>
                 )}
               </Link>
