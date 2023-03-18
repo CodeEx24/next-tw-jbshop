@@ -24,8 +24,6 @@ function CartScreen() {
     cartQtyUpdateItem(product);
   };
 
-  console.log(cartItems);
-
   return (
     <Layout title="Shopping Cart">
       <div className="bg-white w-full">

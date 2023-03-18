@@ -46,6 +46,18 @@ const cartStore = create((set) => {
 
         return { ...state, cart: { ...state.cart, cartItems } };
       }),
+
+    cartReset: () =>
+      set((state) => {
+        return {
+          ...state,
+          cart: {
+            cartItems: [],
+            shippingAddress: { location: {} },
+            paymentMethod: '',
+          },
+        };
+      }),
   };
 });
 

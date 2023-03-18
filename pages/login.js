@@ -11,15 +11,8 @@ import { useRouter } from 'next/router';
 
 function LoginScreen() {
   const { data: session } = useSession();
-
   const router = useRouter();
   const { redirect } = router.query;
-
-  useEffect(() => {
-    if (session?.user) {
-      router.push(redirect || '/');
-    }
-  }, [router, session, redirect]);
 
   const {
     handleSubmit,
@@ -29,6 +22,8 @@ function LoginScreen() {
 
   const submitHandler = async ({ email, password }) => {
     try {
+      // First Parameter - Depending on provider it can be a google,github, facebook etc.
+      // The second parameter will be handle by NextAuth in [...nextauth].js file
       const result = await signIn('credentials', {
         redirect: false,
         email,
@@ -42,6 +37,13 @@ function LoginScreen() {
       toast.error(getError(error));
     }
   };
+
+  // Everytime there is changes in the Signin session
+  useEffect(() => {
+    if (session?.user) {
+      router.push(redirect || '/');
+    }
+  }, [router, session, redirect]);
 
   return (
     <Layout title="Login">

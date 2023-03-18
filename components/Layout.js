@@ -1,22 +1,11 @@
-import cartStore from '@/utils/Store';
 import Head from 'next/head';
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { useSession } from 'next-auth/react';
+import Navbar from './Navbar';
 
 function Layout({ title, children }) {
-  const { status, data: session } = useSession();
-
-  const cart = cartStore((state) => state.cart);
-  const [cartItemsCount, setcartItemsCount] = useState(0);
-
-  useEffect(() => {
-    setcartItemsCount(cart.cartItems.length);
-  }, [cart.cartItems]);
-
   return (
     <>
       <Head>
@@ -30,46 +19,7 @@ function Layout({ title, children }) {
 
       <div className="flex min-h-screen flex-col justify-between ">
         <header className="text-gray-600 body-font shadow-md">
-          <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-            <Link
-              href="/"
-              className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                className="w-10 h-10 text-white p-2 bg-indigo-600 rounded-full"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
-              <span className="ml-3 text-xl">Tailblocks</span>
-            </Link>
-            <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-              <Link href={'/cart'} className="mr-5 hover:text-gray-900 ">
-                Cart{' '}
-                {cartItemsCount > 0 && (
-                  <span className="ml-1 rounded-full bg-indigo-600 px-2 py-1 text-xs font-bold text-white">
-                    {cartItemsCount}
-                  </span>
-                )}
-              </Link>
-
-              {status === 'loading' ? (
-                'Loading'
-              ) : session?.user ? (
-                session.user.name
-              ) : (
-                <Link href={'/login'} className="mr-5 hover:text-gray-900">
-                  Log In
-                </Link>
-              )}
-            </nav>
-          </div>
+          <Navbar />
         </header>
 
         <main className="container m-auto flex px-5 mt-4">{children}</main>
