@@ -14,6 +14,7 @@ function Navbar() {
 
   // CartItems
   const cart = cartStore((state) => state.cart);
+  const cartReset = cartStore((state) => state.cartReset);
   const [cartItemsCount, setcartItemsCount] = useState(0);
 
   useEffect(() => {
@@ -22,6 +23,7 @@ function Navbar() {
 
   const logoutClickHandler = () => {
     Cookies.remove('cart');
+    cartReset();
     signOut({ callbackUrl: '/login' });
   };
 

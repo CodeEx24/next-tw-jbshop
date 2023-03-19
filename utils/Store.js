@@ -2,14 +2,12 @@ import { create } from 'zustand';
 import Cookies from 'js-cookie';
 
 const cartStore = create((set) => {
-  const initialCartItems = Cookies.get('cartItems')
-    ? JSON.parse(Cookies.get('cartItems'))
-    : [];
+  const cart = Cookies.get('cart')
+    ? JSON.parse(Cookies.get('cart'))
+    : { cartItems: [], shippingAddress: {}, paymentMethod: '' };
 
   return {
-    cart: {
-      cartItems: initialCartItems,
-    },
+    cart,
     cartAddItem: (newItem) =>
       set((state) => {
         const existItem = state.cart.cartItems.find(
@@ -36,6 +34,7 @@ const cartStore = create((set) => {
 
         return { ...state, cart: { ...state.cart, cartItems } };
       }),
+
     cartQtyUpdateItem: (newItem) =>
       set((state) => {
         const cartItems = state.cart.cartItems.map((item) =>
@@ -53,11 +52,31 @@ const cartStore = create((set) => {
           ...state,
           cart: {
             cartItems: [],
-            shippingAddress: { location: {} },
+            shippingAddress: {},
             paymentMethod: '',
           },
         };
       }),
+
+    saveShippingAddress: (addressDetails) => {
+      set((state) => {
+        const { fullName, address, city, postalCode, country } = addressDetails;
+        return {
+          ...state,
+          cart: {
+            ...state.cart,
+            shippingAddress: {
+              ...state.cart.shippingAddress,
+              fullName,
+              address,
+              city,
+              postalCode,
+              country,
+            },
+          },
+        };
+      });
+    },
   };
 });
 
