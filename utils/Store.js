@@ -77,6 +77,18 @@ const cartStore = create((set) => {
         };
       });
     },
+
+    savePaymentMethod: (method) => {
+      set((state) => {
+        return {
+          ...state,
+          cart: {
+            ...state.cart,
+            paymentMethod: method,
+          },
+        };
+      });
+    },
   };
 });
 
