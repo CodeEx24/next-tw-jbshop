@@ -6,7 +6,9 @@ function CheckoutWizard({ activeStep = 0 }) {
 
   return (
     <div className="w-full">
-      <p className=" text-sm font-medium text-gray-900">Shipping</p>
+      <h1 className="text-3xl font-extrabold tracking-tight text-gray-700 sm:text-4xl mt-10">
+        Order Process
+      </h1>
       <div className="mt-6" aria-hidden="true">
         <div className="bg-gray-200 rounded-full overflow-hidden">
           <div
@@ -16,19 +18,19 @@ function CheckoutWizard({ activeStep = 0 }) {
         </div>
         <div className="hidden sm:grid grid-cols-4 text-sm font-medium text-gray-600 mt-6">
           <div className={`${activeStep === 0 && 'text-indigo-600'}`}>
-            Copying files
+            Initialize Orders
           </div>
           <div
             className={`text-center ${activeStep === 1 && 'text-indigo-600'}`}
           >
-            Migrating database
+            User Details
           </div>
           <div
             className={`text-center ${activeStep === 2 && 'text-indigo-600'}`}
           >
-            Compiling assets
+            Payment Method
           </div>
-          <div className="text-right">Deployed</div>
+          <div className="text-right">Place Order</div>
         </div>
       </div>
     </div>

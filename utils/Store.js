@@ -58,6 +58,14 @@ const cartStore = create((set) => {
         };
       }),
 
+    cartClearItems: () =>
+      set((state) => {
+        return {
+          ...state,
+          cart: { ...state.cart, cartItems: [] },
+        };
+      }),
+
     saveShippingAddress: (addressDetails) => {
       set((state) => {
         const { fullName, address, city, postalCode, country } = addressDetails;

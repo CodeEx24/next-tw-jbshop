@@ -30,10 +30,6 @@ function ShippingScreen() {
     setValue('country', shippingAddress.country);
   }, [setValue, shippingAddress]);
 
-  useEffect(() => {
-    console.log(cart);
-  }, [cart]);
-
   const submitHandler = ({ fullName, address, city, postalCode, country }) => {
     saveShippingAddress({
       fullName,
