@@ -1,26 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import cartStore from '@/utils/Store';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-function ProductItem({ product }) {
-  const cartAddItem = cartStore((state) => state.cartAddItem);
-  const cart = cartStore((state) => state.cart);
-
-  const addCartItemHandler = (product) => {
-    const existItem = cart.cartItems.find((x) => x.slug === product.slug);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
-
-    if (product.countInStock < quantity) {
-      alert('Product is out of stock');
-      return;
-    }
-
-    cartAddItem({ ...product, quantity });
-    // router.push('/cart');
-  };
-
+function ProductItem({ product, addToCartHandler }) {
   return (
     <>
       <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-lg ">
@@ -51,7 +34,7 @@ function ProductItem({ product }) {
           <p className="mt-1">$16.00</p>
           <button
             className="button primary-button"
-            onClick={() => addCartItemHandler(product)}
+            onClick={() => addToCartHandler(product)}
           >
             Add to Cart
             {/* <svg

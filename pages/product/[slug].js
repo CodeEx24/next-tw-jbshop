@@ -1,27 +1,29 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import data from '@/utils/data';
 import Layout from '@/components/Layout';
 import Image from 'next/image';
 // import Link from 'next/link';
 import cartStore from '@/utils/Store';
+import db from '@/utils/db';
+import Product from '@/models/Product';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-function ProductScreen() {
+function ProductScreen(props) {
+  const { product } = props;
   const router = useRouter();
-  const { query } = useRouter();
-  const { slug } = query;
-  const product = data.products.find((x) => x.slug === slug);
 
   const addCartItems = cartStore((state) => state.cartAddItem);
   const cart = cartStore((state) => state.cart);
 
-  const addToCartHandler = () => {
+  const addToCartHandler = async () => {
     const existItem = cart.cartItems.find((x) => x.slug === product.slug);
     const quantity = existItem ? existItem.quantity + 1 : 1;
+    const { data } = await axios.get(`/api/products/${product._id}`);
 
-    if (product.countInStock < quantity) {
-      alert('Product is out of stock');
-      return;
+    // actual data in database so if there is incoming different orders from users it will get the updated quantity of product.
+    if (data.countInStock < quantity) {
+      return toast.error('Product is out of stock');
     }
 
     addCartItems({ ...product, quantity });
@@ -33,7 +35,7 @@ function ProductScreen() {
   }, [cart]);
 
   if (!product) {
-    return <div>Product not found</div>;
+    return <Layout title="Product Not Found">Product not found</Layout>;
   }
 
   return (
@@ -225,3 +227,19 @@ function ProductScreen() {
 }
 
 export default ProductScreen;
+
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const { slug } = params;
+
+  await db.connect();
+  // To return plain javascript object that can be easily serialized
+  const product = await Product.findOne({ slug }).lean();
+  await db.disconnect();
+
+  return {
+    props: {
+      product: product ? db.convertDocToObj(product) : null,
+    },
+  };
+}

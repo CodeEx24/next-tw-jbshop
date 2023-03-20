@@ -7,6 +7,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function CartScreen() {
   const router = useRouter();
@@ -20,8 +22,13 @@ function CartScreen() {
     cartRemoveItem(product);
   };
 
-  const handleQuantityChange = (product) => {
+  const handleQuantityChange = async (product) => {
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    if (data.countInStock < product.quantity) {
+      return toast.error(`${product.name} is out of stock`);
+    }
     cartQtyUpdateItem(product);
+    console.log('Product updated in the cart');
   };
 
   return (
