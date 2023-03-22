@@ -26,8 +26,9 @@ export default NextAuth({
             _id: user._id,
             name: user.name,
             email: user.email,
-            image: 'f',
             isAdmin: user.isAdmin,
+            // Any information of user that is needed can be stored in session
+            sampleData: 'Hello2',
           };
         }
         // Throw an error if authentication is unsuccessful

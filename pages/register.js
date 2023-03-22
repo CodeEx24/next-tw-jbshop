@@ -8,8 +8,9 @@ import { signIn, useSession } from 'next-auth/react';
 import { getError } from '@/utils/error';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
-function LoginScreen() {
+function RegisterScreen() {
   const { data: session } = useSession();
   const router = useRouter();
   const { redirect } = router.query;
@@ -17,11 +18,15 @@ function LoginScreen() {
   const {
     handleSubmit,
     register,
+    getValues,
     formState: { errors },
   } = useForm();
 
-  const submitHandler = async ({ email, password }) => {
+  const submitHandler = async ({ name, email, password }) => {
     try {
+      // Create the user in backend (database)
+      await axios.post('/api/auth/signup', { name, email, password });
+
       // First Parameter - Depending on provider it can be a google,github, facebook etc.
       // The second parameter will be handle by NextAuth in [...nextauth].js file
       const result = await signIn('credentials', {
@@ -46,7 +51,7 @@ function LoginScreen() {
   }, [router, session, redirect]);
 
   return (
-    <Layout title="Login">
+    <Layout title="Create Account">
       <div className="w-full min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Image
@@ -57,7 +62,7 @@ function LoginScreen() {
             alt="Workflow"
           />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
+            Create an account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Or{' '}
@@ -75,6 +80,31 @@ function LoginScreen() {
             <form className="space-y-6" onSubmit={handleSubmit(submitHandler)}>
               <div>
                 <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Name
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoFocus
+                    autoComplete="name"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    {...register('name', {
+                      required: 'Please enter name',
+                    })}
+                  />
+                  {errors.name && (
+                    <div className="text-red-500">{errors.name.message}</div>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
                 >
@@ -84,7 +114,6 @@ function LoginScreen() {
                   <input
                     id="email"
                     name="email"
-                    autoComplete="email"
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     {...register('email', {
                       required: 'Please enter email',
@@ -113,7 +142,6 @@ function LoginScreen() {
                     id="password"
                     name="password"
                     type="password"
-                    autoComplete="current-password"
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     {...register('password', {
                       required: 'Please enter password',
@@ -128,6 +156,40 @@ function LoginScreen() {
                       {errors.password.message}
                     </div>
                   )}
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    {...register('confirmPassword', {
+                      required: 'Please enter the confirm password',
+                      validate: (value) => value === getValues('password'),
+                      minLength: {
+                        value: 6,
+                        message: 'Password must be more than 5 characters',
+                      },
+                    })}
+                  />
+                  {errors.confirmPassword && (
+                    <div className="text-red-500">
+                      {errors.confirmPassword.message}
+                    </div>
+                  )}
+                  {errors.confirmPassword &&
+                    errors.confirmPassword.type === 'validate' && (
+                      <div className="text-red-500">Password do not match</div>
+                    )}
                 </div>
               </div>
 
@@ -147,27 +209,30 @@ function LoginScreen() {
                   </label>
                 </div>
 
-                <div className="text-sm">
+                <div className="text-sm ">
                   <div className="">
-                    Don&apos;t have an account? &nbsp;
+                    Already have an account? &nbsp;
                     <Link
-                      href={`/register?redirect=${redirect || '/'}`}
+                      href={`/login?redirect=${redirect || '/'}`}
                       className="text-indigo-600 font-medium"
                     >
-                      Register
+                      Sign In
                     </Link>
                   </div>
                 </div>
               </div>
 
-              <div>
-                <button
-                  type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Sign in
+              <div className="mb-4 ">
+                <button className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                  Register
                 </button>
               </div>
+              {/* <div className="mb-4 ">
+                Don&apos;t have an account? &nbsp;
+                <Link href={`/register?redirect=${redirect || '/'}`}>
+                  Register
+                </Link>
+              </div> */}
             </form>
 
             <div className="mt-6">
@@ -250,4 +315,4 @@ function LoginScreen() {
   );
 }
 
-export default LoginScreen;
+export default RegisterScreen;
