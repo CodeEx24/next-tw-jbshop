@@ -93,22 +93,25 @@ function Navbar() {
               {isOpen && (
                 <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="" role="none">
-                    <a href="#" className="navbar-dropdown-link">
+                    <Link href="#" className="navbar-dropdown-link">
                       Account settings
-                    </a>
-                    <a href="#" className="navbar-dropdown-link">
-                      Support
-                    </a>
-                    <a href="#" className="navbar-dropdown-link">
+                    </Link>
+                    <Link
+                      href="/order-history"
+                      className="navbar-dropdown-link"
+                    >
+                      Order History
+                    </Link>
+                    <Link href="#" className="navbar-dropdown-link">
                       License
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       href="#"
                       className="navbar-dropdown-link"
                       onClick={logoutClickHandler}
                     >
                       Sign out
-                    </a>
+                    </Link>
                   </div>
                 </div>
               )}
